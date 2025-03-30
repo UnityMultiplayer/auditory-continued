@@ -25,8 +25,7 @@ public class AuditoryClient implements ClientModInitializer {
 
         KeyBindingHelper.registerKeyBinding(reloadKey);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (reloadKey.isDown()) {
-                assert client.player != null;
+            if (reloadKey.isDown() && client.player != null) {
                 Minecraft.getInstance().getSoundManager().reload();
                 Minecraft mc = Minecraft.getInstance();
                 mc.gui.getChat().addMessage(Component.translatable("auditory.sound_reload_message"));

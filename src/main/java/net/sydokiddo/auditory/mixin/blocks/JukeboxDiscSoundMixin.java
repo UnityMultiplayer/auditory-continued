@@ -3,7 +3,6 @@ package net.sydokiddo.auditory.mixin.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,7 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
@@ -46,9 +44,8 @@ public abstract class JukeboxDiscSoundMixin extends BlockEntity {
 
     @Inject(method = "setTheItem", at = @At("HEAD"))
     private void auditory_insertDiscSound(ItemStack itemStack, CallbackInfo ci) {
-        if (Auditory.getConfig().block_sounds.jukebox_sounds) {
+        if (Auditory.getConfig().block_sounds.jukebox_sounds && this.level != null) {
             boolean bl = !itemStack.isEmpty();
-            assert this.level != null;
             Optional<Holder<JukeboxSong>> optional = JukeboxSong.fromStack(this.level.registryAccess(), itemStack);
             if (bl && optional.isPresent()) {
                 this.level.playSound(null, this.getBlockPos(), ModSoundEvents.BLOCK_JUKEBOX_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
